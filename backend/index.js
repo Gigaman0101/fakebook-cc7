@@ -1,3 +1,5 @@
+require('dotenv').config();
+require('./config/passport');
 const express = require('express');
 const app = express();
 const db = require('./models');
@@ -5,10 +7,6 @@ const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
 const friendRoutes = require('./routes/friend');
 const commentRoutes = require('./routes/comment');
-
-
-require('./config/passport');
-
 
 
 app.use(express.json());
@@ -20,8 +18,8 @@ app.use('/comment', commentRoutes);
 app.use('/friend', friendRoutes);
 
 
-app.listen("8000", () => {
-    console.log(`Server is starting at port 8000`)
+app.listen(process.env.PORT, () => {
+    console.log(`Server is starting at port ${process.env.PORT}`)
 });
 
 db.sequelize.sync({ force: false })

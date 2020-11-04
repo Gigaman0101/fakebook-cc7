@@ -2,9 +2,10 @@ const passport = require('passport');
 const { Strategy, ExtractJwt } = require('passport-jwt');
 const db = require('../models');
 
+
 const options = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: "CODECAMP7",
+    secretOrKey: process.env.SECRET,
 };
 
 const jwtStrategy = new Strategy(options, async (payload, done) => {

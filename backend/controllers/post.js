@@ -1,11 +1,11 @@
 const db = require('../models');
 
-const getAllPosts = async (req, res) => {
+const getAllMyPosts = async (req, res) => {
     const allPosts = await db.Post.findAll({ where: { user_id: req.user.id } })
     res.status(200).send(allPosts);
 };
 
-const getPostById = async (req, res) => {
+const getMyFeed = async (req, res) => {
     const targetPost = await db.Post.findOne({ where: { id: req.params.id } });
     if (targetPost && targetTPost.user_id === req.user.id) {
         res.status(200).send(targetPost);
@@ -49,8 +49,8 @@ const deletePost = async (req, res) => {
 
 
 module.exports = {
-    getAllPosts,
-    getPostById,
+    getAllMyPosts,
+    getMyFeed,
     updatePost,
     createPost,
     deletePost
