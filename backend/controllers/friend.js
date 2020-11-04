@@ -3,7 +3,7 @@ const db = require("../models");
 const getAllFriends = async (req, res) => {
     const allFriends = await db.Friend.findAll({ where: { request_to_id: req.user.id } })
     res.status(200).send(allFriends);
-}
+};
 
 const getFriendById = async (req, res) => {
     const targetFriend = await db.Friend.findOne({ where: { id: req.params.id } });
@@ -15,14 +15,18 @@ const getFriendById = async (req, res) => {
 };
 
 const createFriend = async (req, res) => {
-    const { status } = req.body;
-    const newFriend = await db.Friend.create({
-        status,
-        request_to_id: req.user.id,
-        request_by_id: req.user.id,
-    });
-
-    res.status(201).send(newFriend);
+    const { status, request_to_id } = req.body;
+    const targetFriend = await db.Friend.findOne({ where: { id: request_to_id } })
+    if (targetFriend && status === "PENDING") {
+        const newFriend = await db.Friend.create({
+            status,
+            request_to_id: req.user.id,
+            request_by_id: targetFriend.id,
+        });
+        res.status(201).send(newFriend);
+    } else {
+        res.status(400).send({ message: `Not found friend ID: ${targetFriend.id}` })
+    }
 };
 
 const updateFriend = async (req, res) => {
